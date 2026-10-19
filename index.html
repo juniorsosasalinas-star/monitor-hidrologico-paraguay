@@ -4,8 +4,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Niveles del río Paraguay — Asunción</title>
+
+  <title>Monitor Hidrológico del Río Paraguay</title>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+
   <style>
     body {
       font-family: system-ui, Arial, sans-serif;
@@ -14,9 +17,50 @@
       margin: 0;
       padding: 24px;
     }
-    main { max-width: 1100px; margin: auto; }
-    h1 { margin-bottom: 5px; }
-    .sub, small { color: #567; }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .encabezado {
+      background: white;
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 3px 18px #1a36501c;
+    }
+
+    .logo {
+      width: 155px;
+      max-height: 125px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .titulo-institucional {
+      text-align: center;
+      flex: 1;
+    }
+
+    .titulo-institucional h1 {
+      font-size: 26px;
+      margin: 0 0 8px;
+      color: #123d68;
+    }
+
+    .titulo-institucional p {
+      margin: 0;
+      color: #567;
+    }
+
+    .sub, small {
+      color: #567;
+    }
+
     .card {
       background: white;
       padding: 20px;
@@ -24,51 +68,156 @@
       box-shadow: 0 3px 18px #1a36501c;
       margin-top: 18px;
     }
-    .chart { height: 480px; }
-    .nota { font-size: 14px; color: #567; }
+
+    .chart {
+      height: 480px;
+    }
+
+    .nota {
+      font-size: 14px;
+      color: #567;
+    }
+
+    .estacion {
+      margin-top: 26px;
+      margin-bottom: 8px;
+      color: #123d68;
+    }
+
+    .fuente {
+      background: #e8f1f9;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 18px;
+      font-size: 14px;
+    }
+
+    a {
+      color: #0759aa;
+    }
+
     @media (max-width: 600px) {
-      body { padding: 12px; }
-      .chart { height: 350px; }
+      body {
+        padding: 12px;
+      }
+
+      .encabezado {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .logo {
+        width: 125px;
+        max-height: 100px;
+      }
+
+      .titulo-institucional h1 {
+        font-size: 21px;
+      }
+
+      .chart {
+        height: 350px;
+      }
     }
   </style>
 </head>
+
 <body>
 <main>
-  <h1>Río Paraguay — Estación Asunción</h1>
-  <p class="sub">Comparación diaria del episodio histórico 2018–2019 con 2026</p>
+
+  <!-- ENCABEZADO INSTITUCIONAL -->
+  <header class="encabezado">
+
+    <img
+      class="logo"
+      src="AEP%202023-2028%20es%20%282%29.png"
+      alt="Logotipo de la Agencia Espacial del Paraguay"
+    >
+
+    <div class="titulo-institucional">
+      <h1>MONITOR HIDROLÓGICO DEL RÍO PARAGUAY</h1>
+      <p>Seguimiento y comparación de niveles hidrométricos</p>
+    </div>
+
+    <img
+      class="logo"
+      src="geolab%20logo%20negro%20%281%29.png"
+      alt="Logotipo de GEO Lab"
+    >
+
+  </header>
+
+  <!-- ESTACIÓN ASUNCIÓN -->
+  <h2 class="estacion">Estación Asunción</h2>
+
+  <p class="sub">
+    Comparación diaria del episodio histórico 2018–2019 con 2026
+  </p>
 
   <section class="card">
+
     <div class="chart">
       <canvas id="grafico"></canvas>
     </div>
+
     <p class="nota">
-      Pasá el mouse sobre cada línea para consultar la fecha
-      (día/mes/año) y el nivel del río en metros.
+      Pasá el mouse sobre las líneas del gráfico para
+      consultar la fecha exacta (día/mes/año)
+      y el nivel del río en metros.
     </p>
-    <p id="estado"><small>Cargando datos...</small></p>
+
+    <p id="estado">
+      <small>Cargando datos...</small>
+    </p>
+
+    <div class="fuente">
+      <strong>Fuente de datos declarada:</strong>
+      Dirección de Meteorología e Hidrología (DMH) — Paraguay.
+      <a
+        href="https://www.meteorologia.gov.py/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Consultar sitio oficial
+      </a>
+    </div>
+
   </section>
 
+  <!-- ACTUALIZACIÓN -->
   <section class="card">
+
     <h2>Actualización diaria</h2>
+
     <p>
-      Para agregar una medición de 2026, editá el archivo
-      <strong>niveles.csv</strong> de este repositorio en GitHub.
-      Agregá una nueva fila con el siguiente número de día,
-      fecha y nivel actual. Guardá los cambios; el gráfico
-      se actualizará al recargar esta página.
+      Para agregar una nueva medición de 2026,
+      editá el archivo <strong>niveles.csv</strong>
+      de este repositorio en GitHub.
+      Agregá una nueva fila con el siguiente
+      número de día, fecha y nivel actual.
+      Guardá los cambios y recargá esta página.
     </p>
-    <p><small>
-      Las dos series se alinean por día de comparación
-      (día 1, día 2, etc.), no por fecha calendario.
-      Verificá la fuente y el criterio de alineación antes
-      de interpretar las crecidas.
-    </small></p>
+
+    <p>
+      <small>
+        Las dos series se alinean por día de comparación
+        (día 1, día 2, etc.), no por fecha calendario.
+        La procedencia de las mediciones y el criterio
+        de comparación deben verificarse antes de
+        interpretar las crecidas.
+      </small>
+    </p>
+
   </section>
+
 </main>
 
 <script>
+
 function csvParse(text) {
-  return text.trim().split(/\r?\n/).slice(1)
+  return text.trim()
+    .split(/\r?\n/)
+    .slice(1)
     .map(line => line.split(','))
     .filter(a => a.length >= 5)
     .map(a => ({
@@ -83,24 +232,38 @@ function csvParse(text) {
 
 function fechaVisible(fecha) {
   if (!fecha) return 'Fecha no disponible';
+
   const partes = fecha.split('-');
+
   if (partes.length !== 3) return fecha;
+
   return partes[2] + '/' + partes[1] + '/' + partes[0];
 }
 
 fetch('./niveles.csv?version=' + Date.now())
+
   .then(r => {
-    if (!r.ok) throw Error('No se encuentra niveles.csv');
+    if (!r.ok) {
+      throw Error('No se encuentra niveles.csv');
+    }
     return r.text();
   })
+
   .then(t => {
+
     const rows = csvParse(t);
-    if (!rows.length) throw Error('Archivo sin datos');
+
+    if (!rows.length) {
+      throw Error('Archivo sin datos');
+    }
 
     new Chart(document.getElementById('grafico'), {
+
       type: 'line',
+
       data: {
         labels: rows.map(r => r.dia),
+
         datasets: [
           {
             label: 'Histórico 2018–2019',
@@ -112,6 +275,7 @@ fetch('./niveles.csv?version=' + Date.now())
             borderWidth: 2,
             spanGaps: false
           },
+
           {
             label: '2026',
             data: rows.map(r => r.nivelActual),
@@ -124,25 +288,37 @@ fetch('./niveles.csv?version=' + Date.now())
           }
         ]
       },
+
       options: {
         responsive: true,
         maintainAspectRatio: false,
+
         interaction: {
           mode: 'nearest',
           intersect: false,
           axis: 'xy'
         },
+
         plugins: {
+
           tooltip: {
             callbacks: {
+
               title: items => {
                 const fila = rows[items[0].dataIndex];
                 return 'Día de comparación: ' + fila.dia;
               },
+
               label: context => {
                 const fila = rows[context.dataIndex];
-                const esHistorico = context.datasetIndex === 0;
-                const fecha = esHistorico ? fila.historica : fila.actual;
+
+                const esHistorico =
+                  context.datasetIndex === 0;
+
+                const fecha = esHistorico
+                  ? fila.historica
+                  : fila.actual;
+
                 const nivel = context.parsed.y;
 
                 return context.dataset.label +
@@ -151,16 +327,25 @@ fetch('./niveles.csv?version=' + Date.now())
               }
             }
           },
-          legend: { position: 'bottom' }
+
+          legend: {
+            position: 'bottom'
+          }
         },
+
         scales: {
+
           x: {
             title: {
               display: true,
               text: 'Día de comparación (consultá la fecha al pasar el mouse)'
             },
-            ticks: { maxTicksLimit: 14 }
+
+            ticks: {
+              maxTicksLimit: 14
+            }
           },
+
           y: {
             title: {
               display: true,
@@ -171,7 +356,10 @@ fetch('./niveles.csv?version=' + Date.now())
       }
     });
 
-    const disponibles = rows.filter(r => r.nivelActual !== null);
+    const disponibles = rows.filter(
+      r => r.nivelActual !== null
+    );
+
     const ultimo = disponibles[disponibles.length - 1];
 
     document.getElementById('estado').textContent = ultimo
@@ -179,11 +367,17 @@ fetch('./niveles.csv?version=' + Date.now())
         ultimo.nivelActual.toFixed(2) +
         ' m — Fecha: ' + fechaVisible(ultimo.actual)
       : 'No hay niveles de 2026 cargados.';
+
   })
+
   .catch(e => {
+
     document.getElementById('estado').textContent =
       'No se pudo cargar el gráfico: ' + e.message;
+
   });
+
 </script>
+
 </body>
 </html>
