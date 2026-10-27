@@ -2,148 +2,98 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Monitor Hidrológico — Río Paraguay, Asunción</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
-  <style>
-    *{box-sizing:border-box}
-    body{font-family:system-ui,Arial,sans-serif;background:#f2f6fa;color:#152b43;margin:0;padding:24px}
-    main{max-width:1100px;margin:auto}
-    h1{margin:0 0 6px;font-size:clamp(1.45rem,3vw,2.1rem)}
-    h2{margin-top:0;font-size:1.25rem}
-    .sub,small{color:#53677b}
-    .sub{margin:0 0 18px}
-    .card{background:#fff;padding:22px;border-radius:14px;box-shadow:0 3px 18px #1a36501c;margin-top:18px}
-    .chart{position:relative;height:480px}
-    .logos{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:18px}
-    .logos img:first-child{width:220px;max-width:48%;height:auto;object-fit:contain}
-    .logos img:last-child{width:115px;max-width:35%;height:auto;object-fit:contain}
-    .info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 24px}
-    .info-item{border-bottom:1px solid #e4ebf2;padding-bottom:10px}
-    .info-item strong{display:block;margin-bottom:4px}
-    .info-item span{color:#53677b}
-    .source-note{margin-bottom:0;color:#53677b;font-size:.92rem}
-    .status{margin-bottom:0;font-weight:600}
-    a{color:#0759aa}
-    @media(max-width:600px){body{padding:12px}.card{padding:16px}.chart{height:360px}.info{grid-template-columns:1fr}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visor Hidrológico — Asunción</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
+<style>
+:root{font-family:system-ui,Arial,sans-serif;color:#17304b;background:#f1f5fa}
+*{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:1120px;margin:auto}
+.logos{display:flex;justify-content:space-between;align-items:center;gap:20px}
+.logos img:first-child{width:220px;max-width:48%;height:auto;object-fit:contain}
+.logos img:last-child{width:125px;max-width:35%;height:auto;object-fit:contain}
+h1{font-size:clamp(24px,3.3vw,34px);margin:20px 0 4px}
+.sub{color:#5b6f83;margin:0 0 22px}
+.card{background:#fff;border-radius:15px;padding:24px;margin:18px 0;box-shadow:0 3px 18px #1a36501a}
+h2{font-size:21px;margin-top:0}.chart{height:490px;position:relative}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px}
+.field{border-bottom:1px solid #e6ebf0;padding:8px 0}
+.field strong{display:block;color:#40556a;font-size:13px;margin-bottom:5px}
+.muted{color:#5b6f83;font-size:14px}.stats{display:flex;gap:14px;flex-wrap:wrap}
+.stat{background:#f4f7fb;border-radius:10px;padding:13px 18px;flex:1;min-width:170px}
+.stat strong{display:block;font-size:22px;margin-top:5px}.stat span{font-size:13px;color:#536a82}
+.orange{color:#c86a16}.blue{color:#0874b6}a{color:#0960a6}
+#estado{font-size:14px;color:#4a6075}
+@media(max-width:650px){body{padding:12px}.card{padding:16px}.chart{height:400px}.grid{grid-template-columns:1fr}.logos img:first-child{width:160px}}
+</style>
 </head>
 <body>
 <main>
-  <header>
-    <div class="logos">
-      <img src="AEP%202023-2028%20es%20%282%29.png" alt="Agencia Espacial del Paraguay">
-      <img src="geolab%20logo%20negro%20%281%29.png" alt="GEO Lab">
-    </div>
-    <h1>COMPARACIÓN DE NIVELES DEL RÍO PARAGUAY</h1>
-    <p class="sub">ESTACIÓN HIDROMÉTRICA DE ASUNCIÓN — Comparación histórica 1982–1983, 2018–2019 y 2026</p>
-  </header>
-
-  <section class="card" aria-labelledby="titulo-grafico">
-    <h2 id="titulo-grafico">Evolución comparativa de los niveles</h2>
-    <div class="chart"><canvas id="grafico" role="img" aria-label="Gráfico de niveles del río Paraguay para tres períodos históricos"></canvas></div>
-    <p id="estado" class="status" aria-live="polite">Cargando datos...</p>
-  </section>
-
-  <section class="card" aria-labelledby="titulo-estacion">
-    <h2 id="titulo-estacion">Datos de la estación hidrométrica</h2>
-    <div class="info">
-      <div class="info-item"><strong>Estación</strong><span>Asunción</span></div>
-      <div class="info-item"><strong>Curso de agua</strong><span>Río Paraguay</span></div>
-      <div class="info-item"><strong>Código de estación (DMH)</strong><span>2000086218</span></div>
-      <div class="info-item"><strong>Referencia fluvial (ANNP)</strong><span>Km 390</span></div>
-      <div class="info-item"><strong>Unidad de medida</strong><span>Metros (m), respecto al cero de la escala hidrométrica</span></div>
-      <div class="info-item"><strong>Períodos comparados</strong><span>1982–1983 · 2018–2019 · 2026</span></div>
-    </div>
-    <p class="source-note"><strong>Fuente de referencia:</strong> Dirección de Meteorología e Hidrología (DMH) — Paraguay. <a href="https://www.meteorologia.gov.py/" target="_blank" rel="noopener noreferrer">Sitio oficial de la DMH</a>.</p>
-    <p class="source-note">La procedencia de cada serie debe verificarse con los registros originales. La comparación alinea las series por número de día, no por fecha calendario.</p>
-  </section>
-
-  <section class="card" aria-labelledby="titulo-actualizacion">
-    <h2 id="titulo-actualizacion">Actualización diaria</h2>
-  </section>
+<div class="logos">
+<img src="AEP%202023-2028%20es%20%282%29.png" alt="Agencia Espacial del Paraguay">
+<img src="geolab%20logo%20negro%20%281%29.png" alt="GEO Lab">
+</div>
+<h1>COMPARACIÓN DE NIVELES DEL RÍO PARAGUAY</h1>
+<p class="sub">Río Paraguay — Estación hidrométrica de Asunción · Comparativo histórico 1982–1983 / 2018–2019 / 2026</p>
+<section class="card">
+<h2>Evolución comparativa de niveles</h2>
+<div class="chart"><canvas id="grafico" role="img" aria-label="Gráfico comparativo de niveles del río Paraguay en Asunción"></canvas></div>
+<p id="estado" role="status" aria-live="polite">Cargando datos...</p>
+<p class="muted">Las series se alinean por número de día transcurrido desde el 1 de agosto de cada período. La curva actual muestra solamente las mediciones disponibles; los días sin datos no se completan artificialmente.</p>
+</section>
+<section class="card">
+<h2>Indicadores de la estación</h2>
+<div class="stats">
+<div class="stat"><span>Máximo de la serie 1982–1983</span><strong class="orange" id="maxHistorico">—</strong><span id="fechaMaxHistorico">Calculando...</span></div>
+<div class="stat"><span>Último registro 2026 disponible</span><strong class="blue" id="nivelActual">—</strong><span id="fechaActual">Cargando...</span></div>
+<div class="stat"><span>Mediciones históricas</span><strong id="totalHistorico">—</strong><span>1982–1983</span></div>
+</div>
+</section>
+<section class="card">
+<h2>Datos de la estación hidrométrica</h2>
+<div class="grid">
+<div class="field"><strong>Estación</strong>Asunción</div>
+<div class="field"><strong>Río</strong>Paraguay</div>
+<div class="field"><strong>Código DMH</strong>2000086218</div>
+<div class="field"><strong>Referencia fluvial (ANNP)</strong>Km 390</div>
+<div class="field"><strong>Unidad</strong>Metros (m), respecto al cero de escala</div>
+<div class="field"><strong>Series comparadas</strong>1982–1983 · 2018–2019 · 2026 (registros disponibles)</div>
+</div>
+<p class="muted">Fuente: <a href="https://www.meteorologia.gov.py/nivel-rio/vermas_convencional.php?code=2000086218" target="_blank" rel="noopener noreferrer">Dirección de Meteorología e Hidrología (DMH) — Asunción</a>. El archivo CSV incluye únicamente los registros disponibles, sin rellenar valores faltantes.</p>
+</section>
 </main>
 <script>
-window.addEventListener('DOMContentLoaded', async () => {
-  const estado = document.getElementById('estado');
-  const limpiar = valor => (valor ?? '').trim();
-  const nivel = valor => {
-    const s = limpiar(valor).replace(',', '.');
-    if (!s) return null;
-    const n = Number(s);
-    return Number.isFinite(n) ? n : null;
-  };
-  function csvParse(text) {
-    return text.replace(/^\uFEFF/, '').split(/\r?\n/).slice(1)
-      .filter(line => line.trim() && !line.trim().startsWith('#'))
-      .map(line => line.split(','))
-      .filter(a => a.length >= 7)
-      .map(a => ({
-        dia: Number(limpiar(a[0])),
-        historica: limpiar(a[1]),
-        nivelHistorico: nivel(a[2]),
-        actual: limpiar(a[3]),
-        nivelActual: nivel(a[4]),
-        fecha1983: limpiar(a[5]),
-        nivel1983: nivel(a[6])
-      }))
-      .filter(r => Number.isInteger(r.dia) && r.dia > 0)
-      .sort((a, b) => a.dia - b.dia);
-  }
-  try {
-    if (typeof Chart === 'undefined') throw new Error('No se pudo cargar la biblioteca del gráfico');
-    const respuesta = await fetch('./niveles.csv?version=' + Date.now(), {cache:'no-store'});
-    if (!respuesta.ok) throw new Error('No se encuentra niveles.csv (HTTP ' + respuesta.status + ')');
-    const rows = csvParse(await respuesta.text());
-    if (!rows.length) throw new Error('El CSV no contiene filas válidas con siete columnas');
-    const datasets = [
-      {label:'Histórico 1982–1983', data:rows.map(r => r.nivel1983), borderColor:'#e58a22', backgroundColor:'#e58a22', pointRadius:0, pointHoverRadius:5, borderWidth:2, spanGaps:false},
-      {label:'Histórico 2018–2019', data:rows.map(r => r.nivelHistorico), borderColor:'#514dbb', backgroundColor:'#514dbb', pointRadius:0, pointHoverRadius:5, borderWidth:2, spanGaps:false},
-      {label:'2026', data:rows.map(r => r.nivelActual), borderColor:'#008fd3', backgroundColor:'#008fd3', pointRadius:2, pointHoverRadius:5, borderWidth:3, spanGaps:false}
-    ];
-    // Etiquetas mensuales según las fechas reales de la serie 1982–1983.
-    const nombresMeses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-    function etiquetaMes(indice) {
-      const fecha = rows[indice]?.fecha1983 || '';
-      const partes = /^(\d{4})-(\d{2})-(\d{2})$/.exec(fecha);
-      if (!partes || partes[3] !== '01') return '';
-      const mes = Number(partes[2]);
-      if (window.innerWidth < 700 && mes % 2 !== 0 && mes !== 1) return '';
-      return nombresMeses[mes - 1] + (mes === 8 || mes === 1 ? ' ' + partes[1] : '');
-    }
-    new Chart(document.getElementById('grafico'), {
-      type:'line',
-      data:{labels:rows.map(r => r.dia), datasets},
-      options:{
-        responsive:true, maintainAspectRatio:false,
-        interaction:{mode:'index', intersect:false},
-        plugins:{
-          legend:{position:'bottom'},
-          tooltip:{callbacks:{
-            title:items => { const i = items[0]?.dataIndex; return i == null ? '' : 'Día ' + rows[i].dia + ' · ' + (rows[i].fecha1983 || ''); },
-            label:ctx => {
-              const r = rows[ctx.dataIndex];
-              const fecha = ctx.datasetIndex === 0 ? r.fecha1983 : ctx.datasetIndex === 1 ? r.historica : r.actual;
-              const valor = ctx.parsed.y;
-              return ctx.dataset.label + ': ' + (valor == null ? 'Sin dato' : valor.toFixed(2) + ' m') + (fecha ? ' (' + fecha + ')' : '');
-            }
-          }}
-        },
-        scales:{
-          x:{title:{display:true,text:'Mes de comparación (referencia: agosto 1982 – agosto 1983)'},grid:{display:false},ticks:{autoSkip:false,maxRotation:0,minRotation:0,callback:function(value){return etiquetaMes(value);}}},
-          y:{title:{display:true,text:'Nivel del río (m)'}}
-        }
-      }
-    });
-    const disponibles = rows.filter(r => r.nivelActual !== null && r.actual);
-    const ultimo = disponibles[disponibles.length - 1];
-    estado.textContent = ultimo
-      ? 'Último nivel actual cargado: ' + ultimo.nivelActual.toFixed(2) + ' m (' + ultimo.actual + ', día ' + ultimo.dia + ').'
-      : 'No hay niveles actuales cargados.';
-  } catch (error) {
-    estado.textContent = 'No se pudo cargar el gráfico: ' + error.message + '. Comprobá que niveles.csv esté junto a index.html y tenga siete columnas.';
-  }
+window.addEventListener('DOMContentLoaded',async()=>{
+const el=id=>document.getElementById(id);
+const number=value=>{const s=String(value??'').trim().replace(',','.');if(!s)return null;const n=Number(s);return Number.isFinite(n)?n:null};
+const fmt=value=>{if(!value)return 'sin fecha';const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(value);return m?`${m[3]}/${m[2]}/${m[1]}`:value};
+try{
+if(typeof Chart==='undefined')throw Error('No se pudo cargar Chart.js');
+const response=await fetch('./niveles.csv?v='+Date.now(),{cache:'no-store'});
+if(!response.ok)throw Error('No se encontró niveles.csv (HTTP '+response.status+')');
+const csv=(await response.text()).replace(/^\uFEFF/,'');
+const rows=csv.split(/\r?\n/).slice(1).filter(line=>line.trim()&&!line.trim().startsWith('#'))
+.map(line=>line.split(',')).filter(a=>a.length>=7)
+.map(a=>({dia:Number(a[0].trim()),f19:a[1].trim(),n19:number(a[2]),f26:a[3].trim(),n26:number(a[4]),f83:a[5].trim(),n83:number(a[6])}))
+.filter(r=>Number.isInteger(r.dia)&&r.dia>0).sort((a,b)=>a.dia-b.dia);
+if(!rows.length)throw Error('El CSV no contiene registros válidos con siete columnas');
+const defs=[
+{label:'1982–1983 (histórico)',key:'n83',date:'f83',color:'#e58a22'},
+{label:'2018–2019',key:'n19',date:'f19',color:'#6755b8'},
+{label:'2026 (registros disponibles)',key:'n26',date:'f26',color:'#008fd3'}];
+const monthNames=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const labels=rows.map(r=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(r.f83);if(m)return `${m[3]} ${monthNames[Number(m[2])-1]}`;const d=new Date(Date.UTC(1982,7,r.dia-1));return `${String(d.getUTCDate()).padStart(2,'0')} ${monthNames[d.getUTCMonth()]}`});
+new Chart(el('grafico'),{type:'line',data:{labels,datasets:defs.map((d,i)=>({label:d.label,data:rows.map(r=>r[d.key]),borderColor:d.color,backgroundColor:d.color,borderWidth:i===2?3:2,pointRadius:0,pointHoverRadius:5,tension:0.16,spanGaps:false}))},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom'},tooltip:{callbacks:{title:items=>'Día '+rows[items[0].dataIndex].dia+' de comparación',label:ctx=>{const d=defs[ctx.datasetIndex],r=rows[ctx.dataIndex];return `${d.label}: ${ctx.parsed.y===null?'Sin dato':ctx.parsed.y.toFixed(2)+' m'} — ${fmt(r[d.date])}`}}}},scales:{x:{title:{display:true,text:'Mes y día (referencia 1982–1983)'},ticks:{maxTicksLimit:13,maxRotation:0,autoSkip:true}},y:{title:{display:true,text:'Nivel del río (m)'}}}}});
+const hist=rows.filter(r=>r.n83!==null),actual=rows.filter(r=>r.n26!==null);
+const max=hist.reduce((best,r)=>!best||r.n83>best.n83?r:best,null);
+const last=actual.at(-1);
+el('maxHistorico').textContent=max?max.n83.toFixed(2)+' m':'Sin datos';
+el('fechaMaxHistorico').textContent=max?fmt(max.f83):'Sin mediciones';
+el('nivelActual').textContent=last?last.n26.toFixed(2)+' m':'Sin datos';
+el('fechaActual').textContent=last?fmt(last.f26):'Sin mediciones';
+el('totalHistorico').textContent=hist.length+' días';
+el('estado').textContent=`Datos cargados: ${hist.length} mediciones de 1982–1983, ${rows.filter(r=>r.n19!==null).length} de 2018–2019 y ${actual.length} de 2026.`;
+}catch(error){el('estado').textContent='Error: '+error.message+'. Revisá que niveles.csv esté junto a index.html.'}
 });
 </script>
 </body>
